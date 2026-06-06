@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Star Sports Keller Order Status</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f6f8;
+      margin: 0;
+      padding: 0;
+      color: #1f2933;
+    }
+
+    .container {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 32px 18px;
+    }
+
+    .card {
+      background: white;
+      border-radius: 16px;
+      padding: 28px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+    }
+
+    h1 {
+      margin-top: 0;
+      font-size: 30px;
+      color: #0b1f3a;
+    }
+
+    p {
+      line-height: 1.5;
+    }
+
+    .search-box {
+      display: flex;
+      gap: 10px;
+      margin-top: 22px;
+    }
+
+    input {
+      flex: 1;
+      padding: 14px;
+      font-size: 16px;
+      border: 1px solid #c8d0d9;
+      border-radius: 8px;
+    }
+
+    button {
+      padding: 14px 18px;
+      font-size: 16px;
+      border: none;
+      border-radius: 8px;
+      background: #0b1f3a;
+      color: white;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    button:hover {
+      opacity: 0.92;
+    }
+
+    .note {
+      font-size: 14px;
+      color: #5d6b7a;
+      margin-top: 14px;
+    }
+
+    .results {
+      margin-top: 24px;
+    }
+
+    .result-card {
+      border: 1px solid #d8dee6;
+      border-radius: 12px;
+      padding: 18px;
+      margin-bottom: 14px;
+      background: #fbfcfd;
+    }
+
+    .status {
+      font-size: 22px;
+      font-weight: bold;
+      color: #0b1f3a;
+      margin: 8px 0;
+    }
+
+    .label {
+      font-weight: bold;
+    }
+
+    .error {
+      background: #fff4f4;
+      border: 1px solid #f2b8b8;
+      padding: 14px;
+      border-radius: 10px;
+      margin-top: 18px;
+    }
+
+    .loading {
+      margin-top: 18px;
+      color: #5d6b7a;
+    }
+
+    @media (max-width: 600px) {
+      .search-box {
+        flex-direction: column;
+      }
+
+      button {
+        width: 100%;
+      }
+
+      h1 {
+        font-size: 26px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="card">
+      <h1>Star Sports Keller Order Status</h1>
+
+      <p>
+        Enter your phone number, order number, name, or group name to check the current status of your order.
+      </p>
+
+      <div class="search-box">
+        <input id="searchInput" type="text" placeholder="Phone, name, order #, or group" />
+        <button onclick="searchOrder()">Search</button>
+      </div>
+
+      <div class="note">
+        Please use the same name or phone number used when placing your order. We will text when your order is ready for pickup.
+      </div>
+
+      <div id="output" class="results"></div>
+    </div>
+  </div>
+
+  <script>
+    const API_URL = https://script.google.com/macros/s/AKfycbxna_cZm4OYLY1Lwh94o-_jsWmKZgKZXJxjpQXxwYtmZmMO6yNGwzGhIaUloSUnQibW/exec;
+
+    async function searchOrder() {
+      const searchValue = document.getElementById("searchInput").value.trim();
+      const output = document.getElementById("output");
+
+      if (!searchValue) {
+        output.innerHTML = `<div class="error">Please enter a phone number, name, order number, or group.</div>`;
+        return;
+      }
+
+      output.innerHTML = `<div class="loading">Searching...</div>`;
+
+      try {
+        const response = await fetch(`${API_URL}?search=${encodeURIComponent(searchValue)}`);
+        const data = await response.json();
+
+        if (!data.success) {
+          output.innerHTML = `<div class="error">${data.message}</div>`;
+          return;
+        }
+
+        output.innerHTML = data.results.map(order => `
+          <div class="result-card">
+            <div><span class="label">Order:</span> ${order.orderNumber || ""}</div>
+            <div><span class="label">Name:</span> ${order.firstName || ""} ${order.lastInitial || ""}</div>
+            <div><span class="label">Group:</span> ${order.group || ""}</div>
+            <div class="status">${order.status || "Status unavailable"}</div>
+            <div><span class="label">Notes:</span> ${order.publicNotes || ""}</div>
+            <div><span class="label">Pickup:</span> ${order.pickupInstructions || ""}</div>
+            <div><span class="label">Last Updated:</span> ${order.lastUpdated || ""}</div>
+          </div>
+        `).join("");
+
+      } catch (error) {
+        output.innerHTML = `
+          <div class="error">
+            Something went wrong. Please try again or contact Star Sports Keller.
+          </div>
+        `;
+      }
+    }
+
+    document.getElementById("searchInput").addEventListener("keydown", function(event) {
+      if (event.key === "Enter") {
+        searchOrder();
+      }
+    });
+  </script>
+</body>
+</html>
