@@ -128,16 +128,16 @@
       <h1>Star Sports Keller Order Status</h1>
 
       <p>
-        Enter your phone number, order number, or full name to check the current status of your order.
+        Enter your phone number or order number to check the current status of your order.
       </p>
 
-<div class="search-box">
-  <input id="searchInput" type="text" placeholder="Phone or order number" />
-  <button id="searchButton" type="button">Search</button>
-</div>
+      <div class="search-box">
+        <input id="searchInput" type="text" placeholder="Phone number or order number" />
+        <button id="searchButton" type="button">Search</button>
+      </div>
 
       <div class="note">
-        Please use the same name or phone number used when placing your order. We will text when your order is ready for pickup.
+        Please use the same phone number used when placing your order. We will text when your order is ready for pickup.
       </div>
 
       <div id="output" class="results"></div>
@@ -145,14 +145,14 @@
   </div>
 
   <script>
-    const API_URL = "https://script.google.com/macros/s/AKfycbx_EH6-st3T5JAFkcC68mKMOP2zTPNxt16DXHtJ6039k5JFEzEcfgVhmnuBdGjWOTu0/exec";
+    const API_URL = "https://script.google.com/macros/s/AKfycbxjJGiiPS0alGwHZBtTsEJGoYmyUjYs3gq5o3eW38iA-b4wBSPlG_XaeuXKrit_ohz-/exec";
 
     async function searchOrder() {
       const searchValue = document.getElementById("searchInput").value.trim();
       const output = document.getElementById("output");
 
       if (!searchValue) {
-        output.innerHTML = `<div class="error">Please enter a phone number, name, or order number.</div>`;
+        output.innerHTML = `<div class="error">Please enter your phone number or order number.</div>`;
         return;
       }
 
@@ -171,6 +171,7 @@
           <div class="result-card">
             <div><span class="label">Order:</span> ${order.orderNumber || ""}</div>
             <div><span class="label">Name:</span> ${order.firstName || ""} ${order.lastInitial || ""}</div>
+            <div><span class="label">Group:</span> ${order.group || ""}</div>
             <div class="status">${order.status || "Status unavailable"}</div>
             <div><span class="label">Notes:</span> ${order.publicNotes || ""}</div>
             <div><span class="label">Pickup:</span> ${order.pickupInstructions || ""}</div>
@@ -189,11 +190,11 @@
 
     document.getElementById("searchButton").addEventListener("click", searchOrder);
 
-document.getElementById("searchInput").addEventListener("keydown", function(event) {
-  if (event.key === "Enter") {
-    searchOrder();
-  }
-});
+    document.getElementById("searchInput").addEventListener("keydown", function(event) {
+      if (event.key === "Enter") {
+        searchOrder();
+      }
+    });
   </script>
 </body>
 </html>
