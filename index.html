@@ -131,10 +131,10 @@
         Enter your phone number, order number, name, or group name to check the current status of your order.
       </p>
 
-      <div class="search-box">
-        <input id="searchInput" type="text" placeholder="Phone, name, order #, or group" />
-        <button onclick="searchOrder()">Search</button>
-      </div>
+<div class="search-box">
+  <input id="searchInput" type="text" placeholder="Phone or order number" />
+  <button id="searchButton" type="button">Search</button>
+</div>
 
       <div class="note">
         Please use the same name or phone number used when placing your order. We will text when your order is ready for pickup.
@@ -188,11 +188,13 @@
       }
     }
 
-    document.getElementById("searchInput").addEventListener("keydown", function(event) {
-      if (event.key === "Enter") {
-        searchOrder();
-      }
-    });
+    document.getElementById("searchButton").addEventListener("click", searchOrder);
+
+document.getElementById("searchInput").addEventListener("keydown", function(event) {
+  if (event.key === "Enter") {
+    searchOrder();
+  }
+});
   </script>
 </body>
 </html>
