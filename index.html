@@ -128,7 +128,7 @@
       <h1>Star Sports Keller Order Status</h1>
 
       <p>
-        Enter your phone number, order number, name, or group name to check the current status of your order.
+        Enter your phone number, order number, or full name to check the current status of your order.
       </p>
 
 <div class="search-box">
@@ -152,7 +152,7 @@
       const output = document.getElementById("output");
 
       if (!searchValue) {
-        output.innerHTML = `<div class="error">Please enter a phone number, name, order number, or group.</div>`;
+        output.innerHTML = `<div class="error">Please enter a phone number, name, or order number.</div>`;
         return;
       }
 
@@ -171,7 +171,6 @@
           <div class="result-card">
             <div><span class="label">Order:</span> ${order.orderNumber || ""}</div>
             <div><span class="label">Name:</span> ${order.firstName || ""} ${order.lastInitial || ""}</div>
-            <div><span class="label">Group:</span> ${order.group || ""}</div>
             <div class="status">${order.status || "Status unavailable"}</div>
             <div><span class="label">Notes:</span> ${order.publicNotes || ""}</div>
             <div><span class="label">Pickup:</span> ${order.pickupInstructions || ""}</div>
