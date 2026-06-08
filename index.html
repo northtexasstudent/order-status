@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Star Sports Keller Order Status</title>
+
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -13,13 +14,19 @@
       color: #1f2933;
     }
 
+    .container {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 32px 18px;
+    }
+
     .banner {
-  width: 100%;
-  max-width: 720px;
-  display: block;
-  margin: 0 auto 18px auto;
-  border-radius: 16px;
-}
+      width: 100%;
+      max-width: 720px;
+      display: block;
+      margin: 0 auto 18px auto;
+      border-radius: 16px;
+    }
 
     .card {
       background: white;
@@ -85,11 +92,32 @@
       background: #fbfcfd;
     }
 
+    .status-block {
+      margin-bottom: 18px;
+      padding: 16px;
+      background: #f4f6f8;
+      border-radius: 12px;
+      border: 1px solid #d8dee6;
+    }
+
+    .status-label {
+      font-size: 13px;
+      font-weight: bold;
+      letter-spacing: 1px;
+      color: #5d6b7a;
+      margin-bottom: 4px;
+    }
+
     .status {
-      font-size: 22px;
+      font-size: 28px;
       font-weight: bold;
       color: #0b1f3a;
-      margin: 8px 0;
+      margin: 0;
+    }
+
+    .detail-row {
+      margin-bottom: 9px;
+      line-height: 1.45;
     }
 
     .label {
@@ -121,35 +149,24 @@
       h1 {
         font-size: 26px;
       }
-      .status-block {
-  margin-bottom: 18px;
-  padding: 16px;
-  background: #f4f6f8;
-  border-radius: 12px;
-  border: 1px solid #d8dee6;
-}
 
-.status-label {
-  font-size: 13px;
-  font-weight: bold;
-  letter-spacing: 1px;
-  color: #5d6b7a;
-  margin-bottom: 4px;
-}
+      .card {
+        padding: 22px;
+      }
 
-.status {
-  font-size: 28px;
-  font-weight: bold;
-  color: #0b1f3a;
-  margin: 0;
-}
+      .status {
+        font-size: 24px;
+      }
     }
   </style>
 </head>
+
 <body>
   <div class="container">
-<img class="banner" src="banner.png" alt="Star Sports Keller Order Status">  <div class="card">
-    <h1>Check Your Order Status</h1>
+    <img class="banner" src="https://northtexasstudent.github.io/order-status/banner.png" alt="Star Sports Keller Order Status">
+
+    <div class="card">
+      <h1>Check Your Order Status</h1>
 
       <p>
         Enter your phone number or order number to check the current status of your order.
@@ -161,7 +178,7 @@
       </div>
 
       <div class="note">
-        Please use the same phone number used when placing your order. We will text when your order is ready for pickup.
+        Please use the same phone number used when placing your order. We will text or email when your order is ready for pickup.
       </div>
 
       <div id="output" class="results"></div>
@@ -191,26 +208,26 @@
           return;
         }
 
-       output.innerHTML = data.results.map(order => `
-  <div class="result-card">
-    <div class="status-block">
-      <div class="status-label">STATUS</div>
-      <div class="status">${formatStatus(order.status)}</div>
-    </div>
+        output.innerHTML = data.results.map(order => `
+          <div class="result-card">
+            <div class="status-block">
+              <div class="status-label">STATUS</div>
+              <div class="status">${formatStatus(order.status)}</div>
+            </div>
 
-    <div><span class="label">Order #:</span> ${order.orderNumber || ""}</div>
-    <div><span class="label">Name:</span> ${order.firstName || ""} ${order.lastInitial || ""}</div>
-    <div><span class="label">Group:</span> ${order.group || ""}</div>
+            <div class="detail-row"><span class="label">Order #:</span> ${escapeHTML(order.orderNumber || "")}</div>
+            <div class="detail-row"><span class="label">Name:</span> ${escapeHTML(order.firstName || "")} ${escapeHTML(order.lastInitial || "")}</div>
+            <div class="detail-row"><span class="label">Group:</span> ${escapeHTML(order.group || "")}</div>
 
-    ${order.publicNotes ? `
-      <div><span class="label">Notes:</span> ${order.publicNotes}</div>
-    ` : ""}
+            ${order.publicNotes ? `
+              <div class="detail-row"><span class="label">Notes:</span> ${escapeHTML(order.publicNotes)}</div>
+            ` : ""}
 
-    ${order.pickupInstructions ? `
-      <div><span class="label">Pickup Information:</span> ${order.pickupInstructions}</div>
-    ` : ""}
-  </div>
-`).join("");
+            ${order.pickupInstructions ? `
+              <div class="detail-row"><span class="label">Pickup Information:</span> ${escapeHTML(order.pickupInstructions)}</div>
+            ` : ""}
+          </div>
+        `).join("");
 
       } catch (error) {
         output.innerHTML = `
@@ -220,17 +237,29 @@
         `;
       }
     }
-function formatStatus(status) {
-  if (!status) return "Status unavailable";
 
-  const cleanStatus = status.toString().trim().toUpperCase();
+    function formatStatus(status) {
+      if (!status) return "Status unavailable";
 
-  if (cleanStatus === "RECEIVED") return "Received";
-  if (cleanStatus === "IN PROGRESS") return "In Progress";
-  if (cleanStatus === "READY") return "Ready for Pickup";
+      const cleanStatus = status.toString().trim().toUpperCase();
 
-  return status;
-}
+      if (cleanStatus === "RECEIVED") return "Received";
+      if (cleanStatus === "IN PROGRESS") return "In Progress";
+      if (cleanStatus === "READY") return "Ready for Pickup";
+
+      return status;
+    }
+
+    function escapeHTML(value) {
+      return value
+        .toString()
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
     document.getElementById("searchButton").addEventListener("click", searchOrder);
 
     document.getElementById("searchInput").addEventListener("keydown", function(event) {
