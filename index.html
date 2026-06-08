@@ -169,17 +169,26 @@
           return;
         }
 
-        output.innerHTML = data.results.map(order => `
-          <div class="result-card">
-            <div><span class="label">Order:</span> ${order.orderNumber || ""}</div>
-            <div><span class="label">Name:</span> ${order.firstName || ""} ${order.lastInitial || ""}</div>
-            <div><span class="label">Group:</span> ${order.group || ""}</div>
-            <div class="status">${order.status || "Status unavailable"}</div>
-            <div><span class="label">Notes:</span> ${order.publicNotes || ""}</div>
-            <div><span class="label">Pickup:</span> ${order.pickupInstructions || ""}</div>
-            <div><span class="label">Last Updated:</span> ${order.lastUpdated || ""}</div>
-          </div>
-        `).join("");
+       output.innerHTML = data.results.map(order => `
+  <div class="result-card">
+    <div class="status-block">
+      <div class="status-label">STATUS</div>
+      <div class="status">${formatStatus(order.status)}</div>
+    </div>
+
+    <div><span class="label">Order #:</span> ${order.orderNumber || ""}</div>
+    <div><span class="label">Name:</span> ${order.firstName || ""} ${order.lastInitial || ""}</div>
+    <div><span class="label">Group:</span> ${order.group || ""}</div>
+
+    ${order.publicNotes ? `
+      <div><span class="label">Notes:</span> ${order.publicNotes}</div>
+    ` : ""}
+
+    ${order.pickupInstructions ? `
+      <div><span class="label">Pickup Information:</span> ${order.pickupInstructions}</div>
+    ` : ""}
+  </div>
+`).join("");
 
       } catch (error) {
         output.innerHTML = `
