@@ -121,6 +121,28 @@
       h1 {
         font-size: 26px;
       }
+      .status-block {
+  margin-bottom: 18px;
+  padding: 16px;
+  background: #f4f6f8;
+  border-radius: 12px;
+  border: 1px solid #d8dee6;
+}
+
+.status-label {
+  font-size: 13px;
+  font-weight: bold;
+  letter-spacing: 1px;
+  color: #5d6b7a;
+  margin-bottom: 4px;
+}
+
+.status {
+  font-size: 28px;
+  font-weight: bold;
+  color: #0b1f3a;
+  margin: 0;
+}
     }
   </style>
 </head>
@@ -198,7 +220,17 @@
         `;
       }
     }
+function formatStatus(status) {
+  if (!status) return "Status unavailable";
 
+  const cleanStatus = status.toString().trim().toUpperCase();
+
+  if (cleanStatus === "RECEIVED") return "Received";
+  if (cleanStatus === "IN PROGRESS") return "In Progress";
+  if (cleanStatus === "READY") return "Ready for Pickup";
+
+  return status;
+}
     document.getElementById("searchButton").addEventListener("click", searchOrder);
 
     document.getElementById("searchInput").addEventListener("keydown", function(event) {
